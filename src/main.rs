@@ -8,6 +8,7 @@ use piston_window::*;
 mod ball;
 mod paddle;
 mod app;
+mod ai;
 
 // enum ButtonStatus {
 // Press,

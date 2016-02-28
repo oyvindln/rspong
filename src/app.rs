@@ -8,6 +8,7 @@ use std::path::Path;
 
 use ball::*;
 use paddle::*;
+use ai::update_ai_paddle;
 
 // The height of the paddles
 const PADDLE_HEIGHT: f64 = 40.0;
@@ -116,6 +117,7 @@ impl App {
             UpdateData::None => (),
         }
         update_paddle(&mut self.paddle, self.direction_pressed, args.dt * 50.0);
+        update_ai_paddle(&mut self.right_paddle, &self.ball, args.dt * 50.0);
     }
 
     pub fn key_pressed(&mut self, key: Key) {
