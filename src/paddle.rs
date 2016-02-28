@@ -7,10 +7,12 @@ pub struct Paddle {
     pub height: f64,
 }
 
+/// Updates paddle position according to the requested direction.
 pub fn update_paddle(paddle: &mut Paddle, direction_pressed: Direction, delta: f64) {
     paddle.position[1] += paddle_translate(direction_pressed, delta)
 }
 
+/// Calculate new paddle position according to direction and delta.
 fn paddle_translate(direction: Direction, delta: f64) -> f64 {
     const PADDLE_VELOCITY: f64 = 10.0;
     match direction {
@@ -20,6 +22,7 @@ fn paddle_translate(direction: Direction, delta: f64) -> f64 {
     }
 }
 
+/// Returns what direction the paddle should move according to a key press event.
 pub fn paddle_direction_from_key_press(current_dir: Direction, key: Key) -> Direction {
     match current_dir {
         Direction::None => {
@@ -43,7 +46,7 @@ pub fn paddle_direction_from_key_press(current_dir: Direction, key: Key) -> Dire
         }
     }
 }
-
+/// Returns what direction the paddle should move according to a key release event.
 pub fn paddle_direction_from_key_release(current_dir: Direction, key: Key) -> Direction {
     match current_dir {
         Direction::None => Direction::None,

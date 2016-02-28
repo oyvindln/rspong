@@ -9,9 +9,10 @@ use std::path::Path;
 use ball::*;
 use paddle::*;
 
-//The height of the paddles
+// The height of the paddles
 const PADDLE_HEIGHT: f64 = 40.0;
 
+/// Enum to describe the direction the paddle is currently heading
 #[derive(Clone,Copy)]
 pub enum Direction {
     Up,
@@ -42,10 +43,12 @@ impl App {
             },
             rectangle: [0.0, 0.0, width, height],
             paddle: Paddle {
-                position: [0.5, 10.0] , height: PADDLE_HEIGHT
+                position: [0.5, 10.0],
+                height: PADDLE_HEIGHT,
             },
             right_paddle: Paddle {
-                position: [width - 10.5, 30.0] , height: PADDLE_HEIGHT
+                position: [width - 10.5, 30.0],
+                height: PADDLE_HEIGHT,
             },
             direction_pressed: {
                 Direction::None
@@ -57,6 +60,7 @@ impl App {
 
     }
 
+    /// Draw the scene
     pub fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
         const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
@@ -78,50 +82,38 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             clear(GREEN, gl);
 
-            //Draw ball
+            // Draw ball
             let transform = c.transform.trans(ball_pos[0], ball_pos[1]);
             ellipse(RED, square, transform, gl);
 
-            //Draw left paddle
+            // Draw left paddle
             let transform = c.transform.trans(paddle_pos[0], paddle_pos[1]);
             rectangle(RED, paddle_render, transform, gl);
 
-            //Draw right paddle
+            // Draw right paddle
             let transform = c.transform.trans(right_paddle_pos[0], right_paddle_pos[1]);
             rectangle(RED, paddle_render, transform, gl);
 
-            //Draw text
+            // Draw text
             let transform = c.transform.trans(left_text_pos[0], left_text_pos[1]);
-            text.draw(
-                &left_string,
-                cc,
-                default_draw_state(),
-                transform,
-                gl
-            );
+            text.draw(&left_string, cc, default_draw_state(), transform, gl);
 
             let transform = c.transform.trans(right_text_pos[0], right_text_pos[1]);
-            text.draw(
-                &right_string,
-                cc,
-                default_draw_state(),
-                transform,
-                gl
-            )
+            text.draw(&right_string, cc, default_draw_state(), transform, gl)
         });
     }
 
+    /// Updates the ball and paddle
     pub fn update(&mut self, args: &UpdateArgs) {
-        let data = update_ball(
-            &mut self.ball,
-            &self.paddle,
-            &self.right_paddle,
-            self.rectangle,
-            args.dt * 10.0);
+        let data = update_ball(&mut self.ball,
+                               &self.paddle,
+                               &self.right_paddle,
+                               self.rectangle,
+                               args.dt * 10.0);
         match data {
             UpdateData::PointLeft => self.left_points += 1,
             UpdateData::PointRight => self.right_points += 1,
-            UpdateData::None => ()
+            UpdateData::None => (),
         }
         update_paddle(&mut self.paddle, self.direction_pressed, args.dt * 50.0);
     }
