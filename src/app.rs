@@ -10,9 +10,6 @@ use ball::*;
 use paddle::*;
 use ai::update_ai_paddle;
 
-// The height of the paddles
-const PADDLE_HEIGHT: f64 = 40.0;
-
 /// Enum to describe the direction the paddle is currently heading
 #[derive(Clone,Copy)]
 pub enum Direction {
@@ -67,8 +64,8 @@ impl App {
         const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
         const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
 
-        let square = rectangle::square(0.0, 0.0, 25.0);
-        let paddle_render = [0.0, 0.0, 10.0, PADDLE_HEIGHT];
+        let square = rectangle::square(0.0, 0.0, self.ball.radius * 2.0);
+        let paddle_render = [0.0, 0.0, PADDLE_WIDTH, PADDLE_HEIGHT];
         let text = text::Text::new(30);
         let left_string = self.left_points.to_string();
         let right_string = self.right_points.to_string();
@@ -77,7 +74,8 @@ impl App {
         let paddle_pos = self.paddle.position;
         let right_paddle_pos = self.right_paddle.position;
         let left_text_pos = [5.0, 30.0];
-        let right_text_pos = [590.0, 30.0];
+        // TODO: Proper placement of right player text
+        let right_text_pos = [self.rectangle[2] - 30.0, 30.0];
         let cc = &mut self.character_cache;
 
         self.gl.draw(args.viewport(), |c, gl| {

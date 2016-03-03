@@ -1,7 +1,7 @@
 extern crate piston_window;
 extern crate opengl_graphics;
 extern crate graphics;
-// extern crate piston2d-graphics;
+extern crate rand;
 
 use piston_window::*;
 
@@ -9,11 +9,6 @@ mod ball;
 mod paddle;
 mod app;
 mod ai;
-
-// enum ButtonStatus {
-// Press,
-// Release,
-// }
 
 fn main() {
     let opengl = OpenGL::V3_1;

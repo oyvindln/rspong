@@ -1,15 +1,10 @@
+extern crate rand;
+
 use graphics::math::Vec2d;
 use graphics::types::Rectangle;
+use rand::distributions::{IndependentSample, Range};
 
 use paddle::*;
-
-// fn normalize(vector: Vec2d) -> Vec2d {
-// TODO: use function from piston if possible.
-// use graphics::math::*;
-// let length = square_len(vector).sqrt();
-// mul_scalar(vector, 1.0 / length)
-// }
-//
 
 /// Finds the center of a rectangle.
 fn get_center(rectangle: Rectangle) -> Vec2d {
@@ -20,6 +15,15 @@ fn get_center(rectangle: Rectangle) -> Vec2d {
 /// Test if the ball is at an y value that is the same as the paddle covers.
 fn paddle_ball_intersect(new_pos: Vec2d, radius: f64, paddle: &Paddle) -> bool {
     new_pos[1] + radius > paddle.position[1] && new_pos[1] < paddle.position[1] + paddle.height
+}
+
+/// Generate a new random number for the ball's respawn velocity
+fn get_random_velocity() -> Vec2d {
+    // Create random generator
+    // We should probably store somewhere this eventually
+    let mut rng = rand::thread_rng();
+    let between = rand::distributions::Range::new(-50.0, 50.0);
+    [between.ind_sample(&mut rng), between.ind_sample(&mut rng)]
 }
 
 #[derive(Clone, Default)]
@@ -34,6 +38,14 @@ pub enum UpdateData {
     PointLeft,
     PointRight,
     None,
+}
+
+impl Ball {
+    /// Reset the ball in the middle of `rectangle` with a random velocity
+    fn reset(&mut self, rectangle: Rectangle) {
+        self.position = get_center(rectangle);
+        self.velocity = get_random_velocity();
+    }
 }
 
 /// Move the ball and reset it if it has left the play area.
@@ -60,7 +72,7 @@ pub fn update_ball(ball: &mut Ball,
             ball.velocity[0] = -ball.velocity[0];
             return UpdateData::None;
         }
-        ball.position = get_center(rectangle);
+        ball.reset(rectangle);
         return UpdateData::PointRight;
         // Right edge
     } else if diameter + new_pos[0] > rectangle[2] {
@@ -69,7 +81,7 @@ pub fn update_ball(ball: &mut Ball,
             ball.velocity[0] = -ball.velocity[0];
             return UpdateData::None;
         }
-        ball.position = get_center(rectangle);
+        ball.reset(rectangle);
         return UpdateData::PointLeft;
     } else {
         ball.position[0] = new_pos[0]
