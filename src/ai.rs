@@ -1,7 +1,7 @@
 use paddle::Paddle;
 use ball::Ball;
 
-const AI_MOVEMENT_PER_SECOND: f64 = 100.0;
+const AI_MOVEMENT_PER_SECOND: f64 = 5.0;
 
 /// Calculate the movement of the ai paddle
 ///

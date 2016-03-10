@@ -3,7 +3,7 @@ use piston_window::Key;
 use graphics::math::Vec2d;
 
 // The height of the paddles
-pub const PADDLE_HEIGHT: f64 = 40.0;
+pub const PADDLE_HEIGHT: f64 = 80.0;
 pub const PADDLE_WIDTH: f64 = 10.0;
 
 pub struct Paddle {

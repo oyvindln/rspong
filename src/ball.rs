@@ -2,7 +2,7 @@ extern crate rand;
 
 use graphics::math::Vec2d;
 use graphics::types::Rectangle;
-use rand::distributions::{IndependentSample, Range};
+use rand::distributions::IndependentSample;
 
 use paddle::*;
 

@@ -31,29 +31,36 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(opengl: opengl_graphics::OpenGL, width: f64, height: f64) -> App {
-        App {
-            gl: GlGraphics::new(opengl),
-            ball: Ball {
-                position: [30.0, 300.0],
-                velocity: [-50.0, -50.0],
-                radius: 10.0,
-            },
-            rectangle: [0.0, 0.0, width, height],
-            paddle: Paddle {
-                position: [0.5, 10.0],
-                height: PADDLE_HEIGHT,
-            },
-            right_paddle: Paddle {
-                position: [width - 10.5, 30.0],
-                height: PADDLE_HEIGHT,
-            },
-            direction_pressed: {
-                Direction::None
-            },
-            left_points: 0,
-            right_points: 0,
-            character_cache: GlyphCache::new(Path::new("./Ubuntu-R.ttf")).unwrap(),
+    pub fn new(opengl: opengl_graphics::OpenGL, width: f64, height: f64) -> Result<App, String> {
+        let glyph_cache = GlyphCache::new(Path::new("./Ubuntu-R.ttf"));
+
+        match glyph_cache {
+            Ok(g) => {
+                Ok(App {
+                    gl: GlGraphics::new(opengl),
+                    ball: Ball {
+                        position: [30.0, 300.0],
+                        velocity: [-50.0, -50.0],
+                        radius: 10.0,
+                    },
+                    rectangle: [0.0, 0.0, width, height],
+                    paddle: Paddle {
+                        position: [0.5, 10.0],
+                        height: PADDLE_HEIGHT,
+                    },
+                    right_paddle: Paddle {
+                        position: [width - 10.5, 30.0],
+                        height: PADDLE_HEIGHT,
+                    },
+                    direction_pressed: {
+                        Direction::None
+                    },
+                    left_points: 0,
+                    right_points: 0,
+                    character_cache: g,
+                })
+            }
+            Err(e) => Err(e.to_string()),
         }
 
     }

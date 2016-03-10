@@ -21,7 +21,8 @@ fn main() {
 
     let mut app = app::App::new(opengl,
                                 window.size().width as f64,
-                                window.size().height as f64);
+                                window.size().height as f64)
+                      .unwrap();
 
     for e in window {
 
